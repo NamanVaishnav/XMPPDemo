@@ -245,7 +245,7 @@ class XMPPController: NSObject {
         // Override point for customization after application launch.
         
         //Login into XMPP
-        let auth = AuthenticationModel(jidString: "ravi"+DOMAIN_NAME, serverName: SERVER_NAME, password: "asdasd")
+        let auth = AuthenticationModel(jidString: "naman"+DOMAIN_NAME, serverName: SERVER_NAME, password: "asdasd")
         auth.save()
         self.configureAndStartStream()
     }
@@ -565,6 +565,7 @@ extension XMPPController: XMPPStreamDelegate {
         
         
         //Add user to roster
+        xmppRoster.addUser(XMPPJID(string: "ravi@localhost"), withNickname: "Ravi")
         xmppRoster.addUser(XMPPJID(string: "naman@localhost"), withNickname: "Naman")
         xmppRoster.addUser(XMPPJID(string: "dhruv@localhost"), withNickname: "Banyo")
         getContactList()

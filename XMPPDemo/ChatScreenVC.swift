@@ -14,6 +14,7 @@ class ChatScreenVC: UIViewController {
         didSet {
             DispatchQueue.main.async {
                 self.tblView.reloadData()
+                self.tblView.scrollToRow(at: IndexPath(row: self.messageList.count, section: 0), at: .bottom, animated: true)
             }
         }
     }
