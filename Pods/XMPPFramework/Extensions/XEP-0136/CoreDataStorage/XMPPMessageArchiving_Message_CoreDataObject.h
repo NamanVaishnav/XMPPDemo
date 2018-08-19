@@ -28,8 +28,14 @@
 @property (nonatomic, assign) BOOL isComposing;       // Convenience property
 
 @property (nonatomic, strong) NSDate * timestamp;
+@property (nonatomic, strong) NSDate * deliverTimestamp;
+@property (nonatomic, strong) NSDate * readTimestamp;
 
 @property (nonatomic, strong) NSString * streamBareJidStr;
+
+@property (nonatomic, strong) NSString * status;
+@property (nonatomic, strong) NSString * elementID;
+
 
 /**
  * This method is called immediately before the object is inserted into the managedObjectContext.

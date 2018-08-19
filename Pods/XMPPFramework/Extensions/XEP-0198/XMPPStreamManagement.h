@@ -25,6 +25,8 @@
 
 @property (nonatomic, strong, readonly) id <XMPPStreamManagementStorage> storage;
 
+@property (nonatomic, strong) NSMutableDictionary *messageIDs;
+
 #pragma mark Enable
 
 /**
