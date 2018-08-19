@@ -33,20 +33,18 @@ class ChatScreenVC: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
-        txtChat.addTarget(self, action: #selector(textfieldDidChange(_:)), for: .editingChanged)
+        fetchChatHistory() // Primarily Fetch Data and List Them
+        
         session = XMPP_CONTROLLER.xmppOneToOneChat.session(forUserJID: self.user.jid)
         session?.autoTime = XMPP_CONTROLLER.xmppAutoTime
         XMPP_CONTROLLER.xmppOneToOneChat.addDelegate(self, delegateQueue: DispatchQueue.main)
         XMPP_CONTROLLER.xmppStream.addDelegate(self, delegateQueue: DispatchQueue.main)
         title = self.user.nickname
-        fetchChatHistory()
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        
+        txtChat.addTarget(self, action: #selector(textfieldDidChange(_:)), for: .editingChanged)
     }
     
+    // MARK: fetchChatHistory -- Fetch Saved Messages from Local
     func fetchChatHistory() {
         let request = NSFetchRequest<XMPPMessageArchiving_Message_CoreDataObject>(entityName: "XMPPMessageArchiving_Message_CoreDataObject")
         request.predicate = NSPredicate(format: "bareJidStr = %@", user.jidStr)
@@ -57,6 +55,8 @@ class ChatScreenVC: UIViewController {
         messageList = (controller!.sections!.compactMap({$0.objects}).flatMap({$0}) as! [XMPPMessageArchiving_Message_CoreDataObject]).filter({$0.body != nil})
     }
     
+    
+    // MARK: sendComposingChatToUser -- Fetch Saved Messages from Local
     func sendComposingChatToUser(_ jid:XMPPJID) {
         let message = DDXMLElement(name: "message")
         message.addAttribute(withName: "type", stringValue: "chat")
@@ -67,6 +67,7 @@ class ChatScreenVC: UIViewController {
         XMPP_CONTROLLER.xmppStream.send(message)
     }
     
+    // MARK: sendComposingChatToUser -- Fetch Saved Messages from Local
     func sendPauseChatToUser(_ jid:XMPPJID) {
         let message = DDXMLElement(name: "message")
         message.addAttribute(withName: "type", stringValue: "chat")
@@ -78,6 +79,8 @@ class ChatScreenVC: UIViewController {
     }
 }
 
+
+// MARK: TableView Delegate,Datasource
 extension ChatScreenVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return messageList.count
@@ -91,6 +94,14 @@ extension ChatScreenVC: UITableViewDelegate, UITableViewDataSource {
         cell?.textLabel?.text = message.body
         cell?.detailTextLabel?.text = message.isOutgoing ? XMPP_CONTROLLER.xmppStream.myJID.user : self.user.jid.user
         
+        
+        if message.isOutgoing {
+            cell?.backgroundColor = .gray
+        }else{
+            cell?.backgroundColor = .lightGray
+        }
+        
+        
 //        cell?.textLabel?.textAlignment = message.isOutgoing ? .right : .left
 //        cell?.detailTextLabel?.textAlignment = message.isOutgoing ? .right : .left
         
@@ -100,11 +111,13 @@ extension ChatScreenVC: UITableViewDelegate, UITableViewDataSource {
             cell?.accessoryType = .none
         }
         
+        
+        
         return cell!
     }
 }
 
-
+// MARK: NSFetchedResultsControllerDelegate -- Fetch Saved Messages from Local
 extension ChatScreenVC: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         if let list = (controller.sections?.compactMap({$0.objects}).flatMap({$0}) as? [XMPPMessageArchiving_Message_CoreDataObject])?.filter({$0.body != nil}) {
@@ -116,6 +129,7 @@ extension ChatScreenVC: NSFetchedResultsControllerDelegate {
         }
     }
 }
+
 
 extension ChatScreenVC : UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -162,6 +176,8 @@ extension ChatScreenVC : UITextFieldDelegate {
     
 }
 
+
+// MARK: XMPPOneToOneChatDelegate -- Chat Status identification
 extension ChatScreenVC : XMPPOneToOneChatDelegate{
     func userStatus(_ status: String!, changedForuser jid: XMPPJID!, with message: XMPPMessage!) {
         if jid == XMPP_CONTROLLER.xmppStream.myJID || message.isErrorMessage() || message.wasDelayed() || message.from().user != user.jid.user {
@@ -169,17 +185,17 @@ extension ChatScreenVC : XMPPOneToOneChatDelegate{
         }
         
         if status == "composing" {
-            title = "typing"
+            title = "typing..."
             lastActiveTime = Date()
             DispatchQueue.main.asyncAfter(deadline: .now() + INACTIVE_TIME_INTERVAL) {
                 let timeDifference = Date().timeIntervalSince(self.lastActiveTime)
                 print("Time difference :",timeDifference)
                 if timeDifference > INACTIVE_TIME_INTERVAL {
-                    self.title = ""
+                    self.title = self.user.nickname
                 }
             }
         } else {
-            title = ""
+            title = self.user.nickname
         }
     }
 }
