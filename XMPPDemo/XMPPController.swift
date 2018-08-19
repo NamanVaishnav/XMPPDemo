@@ -569,6 +569,14 @@ extension XMPPController: XMPPStreamDelegate {
         xmppRoster.addUser(XMPPJID(string: "ravi@localhost"), withNickname: "Ravi")
         xmppRoster.addUser(XMPPJID(string: "naman@localhost"), withNickname: "Naman")
         xmppRoster.addUser(XMPPJID(string: "dhruv@localhost"), withNickname: "Banyo")
+        
+        
+        if let myVCard = xmppvCardTempModule.myvCardTemp {
+            myVCard.givenName = "TOKEN"
+            xmppvCardTempModule.updateMyvCardTemp(myVCard)
+        }
+        
+        
         getContactList()
 	}
 	

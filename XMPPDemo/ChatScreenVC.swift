@@ -20,6 +20,7 @@ class ChatScreenVC: UIViewController {
             }
         }
     }
+    
     @IBOutlet weak var tblView: UITableView!
     @IBOutlet weak var txtChat: UITextField!
     
@@ -36,6 +37,7 @@ class ChatScreenVC: UIViewController {
         session = XMPP_CONTROLLER.xmppOneToOneChat.session(forUserJID: self.user.jid)
         session?.autoTime = XMPP_CONTROLLER.xmppAutoTime
         XMPP_CONTROLLER.xmppOneToOneChat.addDelegate(self, delegateQueue: DispatchQueue.main)
+        XMPP_CONTROLLER.xmppStream.addDelegate(self, delegateQueue: DispatchQueue.main)
         title = self.user.nickname
         fetchChatHistory()
     }
@@ -129,6 +131,12 @@ extension ChatScreenVC : UITextFieldDelegate {
                 if let xmppMessage = session.message(withBody: message) {
                     XMPP_CONTROLLER.pendingMessageList.append(xmppMessage.elementID())
                     XMPP_CONTROLLER.xmppStream.send(xmppMessage)
+                    
+                    let status = XMPP_CONTROLLER.getUserStatus(self.user)
+                    
+                    if status != "Online" {
+                        //send push
+                    }
                 }
             }
         }
