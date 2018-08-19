@@ -44,6 +44,7 @@
 		108234F9212958D3007C2F63 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 108234F7212958D3007C2F63 /* Main.storyboard */; };
 		108234FB212958D5007C2F63 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 108234FA212958D5007C2F63 /* Assets.xcassets */; };
 		108234FE212958D5007C2F63 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 108234FC212958D5007C2F63 /* LaunchScreen.storyboard */; };
+		109390482129769D00755231 /* ChatScreenVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 109390472129769D00755231 /* ChatScreenVC.swift */; };
 		81527E30ECD3B63EA74C541C /* Pods_XMPPDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D3729064EEDC063489F2E3D /* Pods_XMPPDemo.framework */; };
 		B38A05AE21297142008B0B05 /* UserListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B38A05AD21297142008B0B05 /* UserListViewController.swift */; };
 /* End PBXBuildFile section */
@@ -122,6 +123,7 @@
 		108234FA212958D5007C2F63 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		108234FD212958D5007C2F63 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		108234FF212958D5007C2F63 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		109390472129769D00755231 /* ChatScreenVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatScreenVC.swift; sourceTree = "<group>"; };
 		10FBE7F48B2CBB1B71CA43DB /* Pods-XMPPDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-XMPPDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-XMPPDemo/Pods-XMPPDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		84D9123A1CD9215023835E61 /* Pods-XMPPDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-XMPPDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-XMPPDemo/Pods-XMPPDemo.release.xcconfig"; sourceTree = "<group>"; };
 		9D3729064EEDC063489F2E3D /* Pods_XMPPDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_XMPPDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -330,6 +332,7 @@
 				108234FF212958D5007C2F63 /* Info.plist */,
 				1044E80121296878003FA916 /* Constants.swift */,
 				B38A05AD21297142008B0B05 /* UserListViewController.swift */,
+				109390472129769D00755231 /* ChatScreenVC.swift */,
 			);
 			path = XMPPDemo;
 			sourceTree = "<group>";
@@ -489,6 +492,7 @@
 				1044E792212966A4003FA916 /* XMPPController.swift in Sources */,
 				1044E7EB212966FA003FA916 /* XMPPRoomLightCoreDataStorage+XMPPMessageArchiveManagementAwareRoomLightDelegate.m in Sources */,
 				1044E7F1212966FA003FA916 /* MIMPushNotificationsPubSub.m in Sources */,
+				109390482129769D00755231 /* ChatScreenVC.swift in Sources */,
 				1044E7ED212966FA003FA916 /* XMPPRoomLight+XEP_0313.m in Sources */,
 				1044E7F8212966FA003FA916 /* XMPPRetransmissionMessageArchivingStorageFilter.m in Sources */,
 				1044E7F7212966FA003FA916 /* XMPPRetransmission.m in Sources */,

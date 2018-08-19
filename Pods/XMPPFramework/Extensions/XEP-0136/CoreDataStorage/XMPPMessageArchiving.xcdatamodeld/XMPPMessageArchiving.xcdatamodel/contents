@@ -14,6 +14,7 @@
         <attribute name="body" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="composing" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="NO" indexed="YES" syncable="YES"/>
         <attribute name="deliverTimestamp" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="elementID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="message" optional="YES" transient="YES" syncable="YES"/>
         <attribute name="messageStr" attributeType="String" syncable="YES"/>
         <attribute name="outgoing" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="NO" indexed="YES" syncable="YES"/>
@@ -24,6 +25,6 @@
     </entity>
     <elements>
         <element name="XMPPMessageArchiving_Contact_CoreDataObject" positionX="160" positionY="192" width="128" height="135"/>
-        <element name="XMPPMessageArchiving_Message_CoreDataObject" positionX="160" positionY="192" width="128" height="225"/>
+        <element name="XMPPMessageArchiving_Message_CoreDataObject" positionX="160" positionY="192" width="128" height="240"/>
     </elements>
 </model>

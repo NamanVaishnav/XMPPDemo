@@ -56,6 +56,15 @@ class XMPPController: NSObject {
 //        }
 //    }
     
+    
+    var userChatList:UserListViewController?
+    fileprivate var fetchedResultsController: NSFetchedResultsController<NSFetchRequestResult>?
+    var contactList = [XMPPUserCoreDataStorageObject]() {
+        didSet {
+            userChatList?.contactList = contactList
+        }
+    }
+    
     var xmppLastActivity:XMPPLastActivity
     
     var xmppAutoTime:XMPPAutoTime
@@ -446,6 +455,31 @@ class XMPPController: NSObject {
         message.addChild(read)
         return XMPPMessage(fromElement: message)
     }
+    
+    func getContactList() {
+        let rosterContext = XMPP_CONTROLLER.managedObjectContext_roster()
+        
+        let entity = NSEntityDescription.entity(forEntityName: "XMPPUserCoreDataStorageObject", in: rosterContext)
+        let sd1 = NSSortDescriptor(key: "sectionNum", ascending: true)
+        let sd2 = NSSortDescriptor(key: "displayName", ascending: true)
+        
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>()
+        fetchRequest.entity = entity
+        fetchRequest.sortDescriptors = [sd1,sd2]
+        self.fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: rosterContext, sectionNameKeyPath: "sectionNum", cacheName: nil)
+        self.fetchedResultsController?.delegate = self
+        do {
+            try self.fetchedResultsController?.performFetch()
+            let tmpList = fetchedResultsController!.sections!.compactMap({$0.objects}).flatMap({$0}) as! [XMPPUserCoreDataStorageObject]
+            if tmpList.count > 0 {
+                contactList = tmpList
+            }
+            
+            print("Contact count: ",self.contactList.count)
+        } catch let error {
+            print("Error while getting data :",error.localizedDescription)
+        }
+    }
 
     
 //    func updateFCMToken() {
@@ -528,6 +562,12 @@ extension XMPPController: XMPPStreamDelegate {
 //        self.xmppServiceDiscovery.discoverInformationAbout(xmppStream.myJID.domain()) // TODO: xmppStream.myJID.bareJID()
 //        self.xmppServiceDiscovery.discoverItemsAssociated(with: xmppStream.myJID.domain())
 //        self.xmppMUCLight.discoverRooms(forServiceNamed: mucLightServiceName)
+        
+        
+        //Add user to roster
+        xmppRoster.addUser(XMPPJID(string: "naman@localhost"), withNickname: "Naman")
+        xmppRoster.addUser(XMPPJID(string: "dhruv@localhost"), withNickname: "Banyo")
+        getContactList()
 	}
 	
 	func xmppStream(_ sender: XMPPStream!, didNotAuthenticate error: DDXMLElement!) {
@@ -786,5 +826,16 @@ extension XMPPMessage {
     convenience init(fromElement element: XMLElement?) {
         object_setClass(element, XMPPMessage.self)
         self.init(from: element)
+    }
+}
+
+
+extension XMPPController: NSFetchedResultsControllerDelegate {
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        if let list = fetchedResultsController?.sections?.compactMap({$0.objects}).flatMap({$0}) as? [XMPPUserCoreDataStorageObject], list.count > 0 {
+            if self.contactList.count != list.count {
+                self.contactList = list
+            }
+        }
     }
 }
