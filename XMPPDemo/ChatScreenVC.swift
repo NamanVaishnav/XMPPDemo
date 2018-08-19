@@ -113,7 +113,7 @@ extension ChatScreenVC: UITableViewDelegate, UITableViewDataSource {
             cell?.accessoryType = .none
         }
         
-        
+        cell?.selectionStyle = .none
         
         return cell!
     }
@@ -153,6 +153,7 @@ extension ChatScreenVC : UITextFieldDelegate {
                     
                     if status != "Online" {
                         //TODO: send push
+                        print("Notification Receiver's Token :",token)
                     }
                 }
             }
