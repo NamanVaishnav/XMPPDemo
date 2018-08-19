@@ -41,11 +41,11 @@
 		1044E7FF212966FA003FA916 /* XMPPMessage+XEP_0060.m in Sources */ = {isa = PBXBuildFile; fileRef = 1044E7DE212966FA003FA916 /* XMPPMessage+XEP_0060.m */; };
 		1044E80221296878003FA916 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1044E80121296878003FA916 /* Constants.swift */; };
 		108234F4212958D3007C2F63 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108234F3212958D3007C2F63 /* AppDelegate.swift */; };
-		108234F6212958D3007C2F63 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108234F5212958D3007C2F63 /* ViewController.swift */; };
 		108234F9212958D3007C2F63 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 108234F7212958D3007C2F63 /* Main.storyboard */; };
 		108234FB212958D5007C2F63 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 108234FA212958D5007C2F63 /* Assets.xcassets */; };
 		108234FE212958D5007C2F63 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 108234FC212958D5007C2F63 /* LaunchScreen.storyboard */; };
 		81527E30ECD3B63EA74C541C /* Pods_XMPPDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D3729064EEDC063489F2E3D /* Pods_XMPPDemo.framework */; };
+		B38A05AE21297142008B0B05 /* UserListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B38A05AD21297142008B0B05 /* UserListViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -118,7 +118,6 @@
 		1044E80121296878003FA916 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		108234F0212958D3007C2F63 /* XMPPDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = XMPPDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		108234F3212958D3007C2F63 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		108234F5212958D3007C2F63 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		108234F8212958D3007C2F63 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		108234FA212958D5007C2F63 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		108234FD212958D5007C2F63 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -126,6 +125,7 @@
 		10FBE7F48B2CBB1B71CA43DB /* Pods-XMPPDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-XMPPDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-XMPPDemo/Pods-XMPPDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		84D9123A1CD9215023835E61 /* Pods-XMPPDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-XMPPDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-XMPPDemo/Pods-XMPPDemo.release.xcconfig"; sourceTree = "<group>"; };
 		9D3729064EEDC063489F2E3D /* Pods_XMPPDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_XMPPDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B38A05AD21297142008B0B05 /* UserListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -324,12 +324,12 @@
 				1044E793212966FA003FA916 /* XMPP Helper */,
 				1044E791212966A4003FA916 /* XMPPController.swift */,
 				108234F3212958D3007C2F63 /* AppDelegate.swift */,
-				108234F5212958D3007C2F63 /* ViewController.swift */,
 				108234F7212958D3007C2F63 /* Main.storyboard */,
 				108234FA212958D5007C2F63 /* Assets.xcassets */,
 				108234FC212958D5007C2F63 /* LaunchScreen.storyboard */,
 				108234FF212958D5007C2F63 /* Info.plist */,
 				1044E80121296878003FA916 /* Constants.swift */,
+				B38A05AD21297142008B0B05 /* UserListViewController.swift */,
 			);
 			path = XMPPDemo;
 			sourceTree = "<group>";
@@ -425,15 +425,11 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputFileListPaths = (
-			);
 			inputPaths = (
 				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
 				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-XMPPDemo-checkManifestLockResult.txt",
 			);
@@ -447,8 +443,6 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputFileListPaths = (
-			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-XMPPDemo/Pods-XMPPDemo-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/CocoaAsyncSocket/CocoaAsyncSocket.framework",
@@ -458,8 +452,6 @@
 				"${BUILT_PRODUCTS_DIR}/libidn/libidn.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-			);
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaAsyncSocket.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaLumberjack.framework",
@@ -479,13 +471,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B38A05AE21297142008B0B05 /* UserListViewController.swift in Sources */,
 				1044E7F6212966FA003FA916 /* XMPPRetransmissionRoomLightStorageFilter.m in Sources */,
 				1044E7EA212966FA003FA916 /* XMPPMessageArchivingCoreDataStorage+XEP_0313.m in Sources */,
 				1044E7FF212966FA003FA916 /* XMPPMessage+XEP_0060.m in Sources */,
 				1044E7F2212966FA003FA916 /* XMPPPushNotifications.m in Sources */,
 				1044E7FD212966FA003FA916 /* XMPPOutOfBandMessagingFilesystemStorage.m in Sources */,
 				1044E7E6212966FA003FA916 /* XMPPOneToOneChat.m in Sources */,
-				108234F6212958D3007C2F63 /* ViewController.swift in Sources */,
 				1044E7E4212966FA003FA916 /* NSString+XMPP_XEP_0245.m in Sources */,
 				1044E7E7212966FA003FA916 /* XMPPOutOfBandHTTPTransferHandler.m in Sources */,
 				1044E7F0212966FA003FA916 /* XMPPServiceDiscovery+XEP_0357.m in Sources */,
