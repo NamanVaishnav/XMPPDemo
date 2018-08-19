@@ -117,15 +117,15 @@ static const int xmppLogLevel = XMPP_LOG_LEVEL_WARN;
 {
     XMPPLogTrace();
     NSLog(@"rv7284 Message received %@", message);
-    if ([message elementForName:@"composing"] != nil) {
+    if ([message elementForName:@"composing"] != nil) { // Typing String Show
         
         [multicastDelegate userStatus:@"composing" changedForuser:message.from withMessage:message];
         
-    } else if ([message elementForName:@"paused"] != nil) {
+    } else if ([message elementForName:@"paused"] != nil) { // Stop typing
         
         [multicastDelegate userStatus:@"paused" changedForuser:message.from withMessage:message];
         
-    } else if ([message isMessageWithBody]) {
+    } else if ([message isMessageWithBody]) { //
         [self handleMessage:message outgoing:NO inStream:sender];
     }
 }

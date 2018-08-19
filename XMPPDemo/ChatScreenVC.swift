@@ -20,7 +20,7 @@ class ChatScreenVC: UIViewController {
     @IBOutlet weak var tblView: UITableView!
     @IBOutlet weak var txtChat: UITextField!
     
-    var session:XMPPOneToOneChatSession?
+    var session:XMPPOneToOneChatSession?  // One to one Chat Handle Through this .
     var user:XMPPUserCoreDataStorageObject!
     var controller:NSFetchedResultsController<XMPPMessageArchiving_Message_CoreDataObject>?
 
