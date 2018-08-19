@@ -664,7 +664,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = namanmvaishnav.XMPPDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "/Users/namanvaishnav/Desktop/XMPPDemo/XMPPDemo/XMPP Helper/Library/XMPPDemo-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "XMPPDemo/XMPP Helper/Library/XMPPDemo-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -685,7 +685,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = namanmvaishnav.XMPPDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "/Users/namanvaishnav/Desktop/XMPPDemo/XMPPDemo/XMPP Helper/Library/XMPPDemo-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "XMPPDemo/XMPP Helper/Library/XMPPDemo-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
