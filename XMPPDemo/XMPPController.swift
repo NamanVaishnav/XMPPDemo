@@ -565,6 +565,7 @@ extension XMPPController: XMPPStreamDelegate {
         
         
         //Add user to roster
+        xmppRoster.addUser(XMPPJID(string: "naman-iPhone@localhost"), withNickname: "Naman-iPhone")
         xmppRoster.addUser(XMPPJID(string: "ravi@localhost"), withNickname: "Ravi")
         xmppRoster.addUser(XMPPJID(string: "naman@localhost"), withNickname: "Naman")
         xmppRoster.addUser(XMPPJID(string: "dhruv@localhost"), withNickname: "Banyo")
@@ -590,6 +591,44 @@ extension XMPPController: XMPPStreamDelegate {
     
     func xmppStreamDidChangeMyJID(_ xmppStream: XMPPStream!) {
         print("Stream: new JID: \((xmppStream.myJID.bare() as String))")
+    }
+    
+    func getUserStatus(_ user:XMPPUserCoreDataStorageObject) -> String {
+        var status = ""
+        if let firstResource = user.resources.first as? XMPPResourceCoreDataStorageObject {
+            if let pres = firstResource.presence {
+                if pres.type()! == "available" {
+                    status = "Online"
+                } else if pres.type()! == "unsubscribed" {
+                    print("User \(user.jid!) has deleted us.")
+                } else if (pres as AnyObject).type == "subscribed" {
+                    // FIXME: The user accepted us. We sould have a way to dismiss this, which last until the next relog or when other we receive presence from other user than this one. :(
+                    print("User \(user.jid!) accepted us.")
+                    if self.isAnyUserResourceAvailable(user) {
+                        status = "Online"
+                    } else {
+                        status = "Offline"
+                    }
+                    
+                } else {
+                    print("Unprocesed presence type: \((pres as AnyObject).type as String)")
+                }
+            }
+        }
+        return status
+    }
+    
+    fileprivate func isAnyUserResourceAvailable(_ user: XMPPUserCoreDataStorageObject) -> Bool {
+        if user.allResources().count > 1 {
+            for r in user.allResources() {
+                if let r1 = r as? XMPPResourceCoreDataStorageObject {
+                    if r1.presence.type() == "available" {
+                        return true
+                    }
+                }
+            }
+        }
+        return false
     }
 	
 	func goOnline() {
@@ -834,9 +873,7 @@ extension XMPPMessage {
 extension XMPPController: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         if let list = fetchedResultsController?.sections?.compactMap({$0.objects}).flatMap({$0}) as? [XMPPUserCoreDataStorageObject], list.count > 0 {
-            if self.contactList.count != list.count {
-                self.contactList = list
-            }
+            self.contactList = list
         }
     }
 }

@@ -14,13 +14,16 @@ class ChatScreenVC: UIViewController {
         didSet {
             DispatchQueue.main.async {
                 self.tblView.reloadData()
-                self.tblView.scrollToRow(at: IndexPath(row: self.messageList.count, section: 0), at: .bottom, animated: true)
+                if self.messageList.count > 0 {
+                    self.tblView.scrollToRow(at: IndexPath(row: self.messageList.count-1, section: 0), at: .bottom, animated: true)
+                }
             }
         }
     }
     @IBOutlet weak var tblView: UITableView!
     @IBOutlet weak var txtChat: UITextField!
     
+    var lastActiveTime:Date!
     var session:XMPPOneToOneChatSession?  // One to one Chat Handle Through this .
     var user:XMPPUserCoreDataStorageObject!
     var controller:NSFetchedResultsController<XMPPMessageArchiving_Message_CoreDataObject>?
@@ -29,9 +32,11 @@ class ChatScreenVC: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
+        txtChat.addTarget(self, action: #selector(textfieldDidChange(_:)), for: .editingChanged)
         session = XMPP_CONTROLLER.xmppOneToOneChat.session(forUserJID: self.user.jid)
         session?.autoTime = XMPP_CONTROLLER.xmppAutoTime
-        
+        XMPP_CONTROLLER.xmppOneToOneChat.addDelegate(self, delegateQueue: DispatchQueue.main)
+        title = self.user.nickname
         fetchChatHistory()
     }
 
@@ -49,6 +54,26 @@ class ChatScreenVC: UIViewController {
         try! self.controller?.performFetch()
         messageList = (controller!.sections!.compactMap({$0.objects}).flatMap({$0}) as! [XMPPMessageArchiving_Message_CoreDataObject]).filter({$0.body != nil})
     }
+    
+    func sendComposingChatToUser(_ jid:XMPPJID) {
+        let message = DDXMLElement(name: "message")
+        message.addAttribute(withName: "type", stringValue: "chat")
+        message.addAttribute(withName: "to", stringValue: jid.full())
+        
+        let xmppMessage = XMPPMessage(from: message)
+        xmppMessage?.addComposingChatState()
+        XMPP_CONTROLLER.xmppStream.send(message)
+    }
+    
+    func sendPauseChatToUser(_ jid:XMPPJID) {
+        let message = DDXMLElement(name: "message")
+        message.addAttribute(withName: "type", stringValue: "chat")
+        message.addAttribute(withName: "to", stringValue: jid.full())
+        
+        let xmppMessage = XMPPMessage(from: message)
+        xmppMessage?.addPausedChatState()
+        XMPP_CONTROLLER.xmppStream.send(message)
+    }
 }
 
 extension ChatScreenVC: UITableViewDelegate, UITableViewDataSource {
@@ -63,6 +88,15 @@ extension ChatScreenVC: UITableViewDelegate, UITableViewDataSource {
         
         cell?.textLabel?.text = message.body
         cell?.detailTextLabel?.text = message.isOutgoing ? XMPP_CONTROLLER.xmppStream.myJID.user : self.user.jid.user
+        
+//        cell?.textLabel?.textAlignment = message.isOutgoing ? .right : .left
+//        cell?.detailTextLabel?.textAlignment = message.isOutgoing ? .right : .left
+        
+        if message.isOutgoing {
+            cell?.accessoryType = (message.status ?? "") == "DELIVERED" ? .checkmark : .none
+        } else {
+            cell?.accessoryType = .none
+        }
         
         return cell!
     }
@@ -86,6 +120,7 @@ extension ChatScreenVC : UITextFieldDelegate {
         
         guard let message = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines) else {return false}
         if message.isEmpty {
+            textField.resignFirstResponder()
             return false
         }
         textField.text = ""
@@ -98,9 +133,45 @@ extension ChatScreenVC : UITextFieldDelegate {
             }
         }
         
+        textField.resignFirstResponder()
         return true
     }
     
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if (textField.text?.isEmpty)! {
+            self.sendComposingChatToUser(self.user.jid)
+        }
+        return true
+    }
     
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        self.sendPauseChatToUser(self.user.jid)
+    }
     
+    @objc func textfieldDidChange(_ sender:UITextField) {
+        
+    }
+    
+}
+
+extension ChatScreenVC : XMPPOneToOneChatDelegate{
+    func userStatus(_ status: String!, changedForuser jid: XMPPJID!, with message: XMPPMessage!) {
+        if jid == XMPP_CONTROLLER.xmppStream.myJID || message.isErrorMessage() || message.wasDelayed() || message.from().user != user.jid.user {
+            return
+        }
+        
+        if status == "composing" {
+            title = "typing"
+            lastActiveTime = Date()
+            DispatchQueue.main.asyncAfter(deadline: .now() + INACTIVE_TIME_INTERVAL) {
+                let timeDifference = Date().timeIntervalSince(self.lastActiveTime)
+                print("Time difference :",timeDifference)
+                if timeDifference > INACTIVE_TIME_INTERVAL {
+                    self.title = ""
+                }
+            }
+        } else {
+            title = ""
+        }
+    }
 }

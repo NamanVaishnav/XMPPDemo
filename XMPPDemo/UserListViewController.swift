@@ -40,8 +40,8 @@ extension UserListViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell")
         
         let contact = contactList[indexPath.row]
-        
         cell?.textLabel?.text = contact.nickname
+        cell?.detailTextLabel?.text = XMPP_CONTROLLER.getUserStatus(contact)
         cell?.selectionStyle = .none
         return cell!
     }
