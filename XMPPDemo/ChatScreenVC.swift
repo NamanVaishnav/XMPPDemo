@@ -28,6 +28,7 @@ class ChatScreenVC: UIViewController {
     var session:XMPPOneToOneChatSession?  // One to one Chat Handle Through this .
     var user:XMPPUserCoreDataStorageObject!
     var controller:NSFetchedResultsController<XMPPMessageArchiving_Message_CoreDataObject>?
+    var uservCard:XMPPvCardTemp?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,8 +41,9 @@ class ChatScreenVC: UIViewController {
         XMPP_CONTROLLER.xmppOneToOneChat.addDelegate(self, delegateQueue: DispatchQueue.main)
         XMPP_CONTROLLER.xmppStream.addDelegate(self, delegateQueue: DispatchQueue.main)
         title = self.user.nickname
-        
         txtChat.addTarget(self, action: #selector(textfieldDidChange(_:)), for: .editingChanged)
+        XMPP_CONTROLLER.xmppvCardTempModule.addDelegate(self, delegateQueue: DispatchQueue.main)
+        XMPP_CONTROLLER.xmppvCardTempModule.fetchvCardTemp(for: user.jid, ignoreStorage: true)
     }
     
     // MARK: fetchChatHistory -- Fetch Saved Messages from Local
@@ -135,6 +137,7 @@ extension ChatScreenVC : UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         
         guard let message = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines) else {return false}
+        guard let vCard = self.uservCard, let token = vCard.givenName else {return false}
         if message.isEmpty {
             textField.resignFirstResponder()
             return false
@@ -149,7 +152,7 @@ extension ChatScreenVC : UITextFieldDelegate {
                     let status = XMPP_CONTROLLER.getUserStatus(self.user)
                     
                     if status != "Online" {
-                        //send push
+                        //TODO: send push
                     }
                 }
             }
@@ -196,6 +199,15 @@ extension ChatScreenVC : XMPPOneToOneChatDelegate{
             }
         } else {
             title = self.user.nickname
+        }
+    }
+}
+
+
+extension ChatScreenVC: XMPPvCardTempModuleDelegate {
+    func xmppvCardTempModule(_ vCardTempModule: XMPPvCardTempModule!, didReceivevCardTemp vCardTemp: XMPPvCardTemp!, for jid: XMPPJID!) {
+        if jid.user == user.jid.user {
+            self.uservCard = vCardTemp
         }
     }
 }
